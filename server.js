@@ -20,7 +20,7 @@ mongodb.connect(connectionString, { useNewUrlParser: true }, function (err, clie
 function passwordProtected(req, res, next) {
     res.set("WWW-Authenticate", 'Basic realm="Liste de Courses"')
     console.log(req.headers.authorization);
-    if (req.headers.authorization == "Basic b2xpdmU6b2xpdmU=") {
+    if (req.headers.authorization == "Basic b2xpdmU6b2xpdmU=" || req.headers.authorization == "Basic Y29sbG9jOmNvbGxvYw==") {
         next()
     }
     else {
@@ -43,7 +43,7 @@ app.get("/", function (req, res) {
       </head>
       <body>
       <div class="container">
-      <h1 class="display-4 text-center py-1">Colloc - Liste de Courses</h1>
+      <h4 class="display-5 text-center py-1">Colloc - Liste de Courses</h4>
       
       <div class="jumbotron p-3 shadow-sm">
       <form id="create-form" action="/create-item" method="POST">
