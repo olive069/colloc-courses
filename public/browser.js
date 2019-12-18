@@ -1,16 +1,16 @@
 function itemTemplate(item) {
   if (item.checked) {
-    return ` 
-    <li class="list-group-item list-group-item-action d-flex align-items-center justify-content-between">
-    <div class="input-group-text d-flex align-items-center justify-content-between">
-    <input class="check-me" id=checkbox data-id=${item._id} type="checkbox" aria-label="Acheté" checked>
-    </div>
-    <span class="item-text">${item.text}</span>
-    <div>
-    <button data-id=${item._id} class="edit-me btn btn-secondary btn-sm mr-1">Modifier</button>
-    <button data-id=${item._id} class="delete-me btn btn-danger btn-sm">Supprimer</button>
-    </div>
-    </li>`;
+      return ` 
+      <li class="list-group-item list-group-item-action d-flex align-items-center justify-content-between">
+      <div class="input-group-text d-flex align-items-center justify-content-between">
+      <input class="check-me" id=checkbox data-id=${item._id} type="checkbox" aria-label="Acheté" checked>
+      </div>
+      <span class="item-text">${item.text}</span>
+      <div>
+      <button data-id=${item._id} class="edit-me btn btn-outline-secondary btn-sm mr-1">Modifier</button>
+      <button data-id=${item._id} class="delete-me btn btn-outline-danger btn-sm">Supprimer</button>
+      </div>
+      </li>`;
   } else {
     return ` 
         <li class="list-group-item list-group-item-action d-flex align-items-center justify-content-between">
@@ -19,8 +19,8 @@ function itemTemplate(item) {
         </div>
         <span class="item-text">${item.text}</span>
         <div>
-        <button data-id=${item._id} class="edit-me btn btn-secondary btn-sm mr-1">Modifier</button>
-        <button data-id=${item._id} class="delete-me btn btn-danger btn-sm">Supprimer</button>
+        <button data-id=${item._id} class="edit-me btn btn-outline-secondary btn-sm mr-1">Modifier</button>
+        <button data-id=${item._id} class="delete-me btn btn-outline-danger btn-sm">Supprimer</button>
         </div>
         </li>`;
   }
