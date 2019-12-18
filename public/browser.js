@@ -25,8 +25,8 @@ function itemTemplate(item) {
         <button class="btn btn-outline-info btn-sm check-me" data-id=${item._id}>OK</button>
         <span class="item-text">${item.text}</span>
         <div>
-        <button data-id=${item._id} class="edit-me btn btn-outline-secondary btn-sm mr-1">Modifier</button>
-        <button data-id=${item._id} class="delete-me btn btn-outline-danger btn-sm">Supprimer</button>
+        <button data-id=${item._id} class="edit-me btn btn-outline-secondary btn-sm mr-1">Modif</button>
+        <button data-id=${item._id} class="delete-me btn btn-outline-danger btn-sm">Suppr</button>
         </div>
         </li>`;
   }
