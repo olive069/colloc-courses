@@ -1,10 +1,13 @@
 function itemTemplate(item) {
   if (item.checked) {
-      return ` 
+    //   <input class="check-me" id=checkbox data-id=${item._id} type="checkbox" aria-label="Acheté" checked>
+    // <div class="input-group-text d-flex align-items-center justify-content-between">
+    {
+      /* </div> */
+    }
+    return ` 
       <li class="list-group-item list-group-item-action d-flex align-items-center justify-content-between">
-      <div class="input-group-text d-flex align-items-center justify-content-between">
-      <input class="check-me" id=checkbox data-id=${item._id} type="checkbox" aria-label="Acheté" checked>
-      </div>
+      <button class="btn btn-info btn-sm check-me" data-id=${item._id}>OK</button>
       <span class="item-text">${item.text}</span>
       <div>
       <button data-id=${item._id} class="edit-me btn btn-outline-secondary btn-sm mr-1">Modifier</button>
@@ -12,11 +15,14 @@ function itemTemplate(item) {
       </div>
       </li>`;
   } else {
+    //   <input class="check-me" id=checkbox data-id=${item._id} type="checkbox" aria-label="Acheté">
+    // <div class="input-group-text d-flex align-items-center justify-content-between">
+    {
+      /* </div> */
+    }
     return ` 
         <li class="list-group-item list-group-item-action d-flex align-items-center justify-content-between">
-        <div class="input-group-text d-flex align-items-center justify-content-between">
-        <input class="check-me" id=checkbox data-id=${item._id} type="checkbox" aria-label="Acheté">
-        </div>
+        <button class="btn btn-outline-info btn-sm check-me" data-id=${item._id}>OK</button>
         <span class="item-text">${item.text}</span>
         <div>
         <button data-id=${item._id} class="edit-me btn btn-outline-secondary btn-sm mr-1">Modifier</button>
@@ -53,6 +59,7 @@ document.getElementById("create-form").addEventListener("submit", function(e) {
 });
 
 document.addEventListener("click", function(e) {
+
   //Delete Feature
   if (e.target.classList.contains("delete-me")) {
     if (confirm("Effacer cet élément?")) {
@@ -92,17 +99,23 @@ document.addEventListener("click", function(e) {
 
   //check Features
   if (e.target.classList.contains("check-me")) {
-    let checked = e.target.parentElement.querySelector(".check-me").checked;
-    console.log(checked);
+    let newClass, checked;
+    if (e.target.classList.contains("btn-info")) {
+      console.log("Ola");
+      newClass = "btn btn-outline-info check-me btn-sm";
+      checked = false;
+    } else {
+      newClass = "btn btn-info check-me btn-sm";
+      checked = true;
+    };
+    console.log(e.target.className);
     axios
       .post("/check-item", {
         id: e.target.getAttribute("data-id"),
         checked: checked
       })
       .then(function() {
-        e.target.parentElement
-          .querySelector(".check-me")
-          .setAttribute("checked", "");
+        e.target.className =newClass;
       });
   }
 });
