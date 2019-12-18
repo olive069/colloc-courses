@@ -1,39 +1,48 @@
-let express = require("express")
-let mongodb = require('mongodb');
-let sanitizeHTML = require('sanitize-html')
+let express = require("express");
+const dotenv = require("dotenv");
+
+dotenv.config();
+let mongodb = require("mongodb");
+let sanitizeHTML = require("sanitize-html");
 let app = express();
-let db
+let db;
 let port = process.env.PORT;
 if (port == null || port == "") {
-    port = 3000
+  port = 3000;
 }
-app.use(express.static('public'))
-app.use(express.json())
-app.use(express.urlencoded({ extended: false }))
+app.use(express.static("public"));
+app.use(express.json());
+app.use(express.urlencoded({ extended: false }));
 
-let connectionString = "mongodb+srv://todoAppUser:todoAppUserPW@cluster0-los3w.mongodb.net/TodoApp?retryWrites=true&w=majority"
-mongodb.connect(connectionString, { useNewUrlParser: true }, function (err, client) {
-    db = client.db()
-    app.listen(port)
-})
+mongodb.connect(
+  process.env.CONNECTIONSTRING,
+  { useNewUrlParser: true },
+  function(err, client) {
+    db = client.db();
+    app.listen(process.env.PORT);
+  }
+);
 
 function passwordProtected(req, res, next) {
-    res.set("WWW-Authenticate", 'Basic realm="Liste de Courses"')
-    console.log(req.headers.authorization);
-    if (req.headers.authorization == "Basic b2xpdmU6b2xpdmU=" || req.headers.authorization == "Basic Y29sbG9jOmNvbGxvYw==") {
-        next()
-    }
-    else {
-        res.status(401).send("Pas de la colloque??")
-    }
+  res.set("WWW-Authenticate", 'Basic realm="Liste de Courses"');
+  if (
+    req.headers.authorization == "Basic b2xpdmU6b2xpdmU=" ||
+    req.headers.authorization == "Basic Y29sbG9jOmNvbGxvYw=="
+  ) {
+    next();
+  } else {
+    res.status(401).send("Pas de la colloque??");
+  }
 }
 
 //use passwordProtected function for each url req
-app.use(passwordProtected)
+app.use(passwordProtected);
 
-app.get("/", function (req, res) {
-    db.collection("items").find().toArray(function (err, items) {
-        res.send(`<!DOCTYPE html>
+app.get("/", function(req, res) {
+  db.collection("items")
+    .find()
+    .toArray(function(err, items) {
+      res.send(`<!DOCTYPE html>
     <html>
     <head>
       <meta charset="UTF-8">
@@ -65,27 +74,54 @@ app.get("/", function (req, res) {
         <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
         <script src="/browser.js"></script>
         </body>
-        </html>`)
-    })
-})
+        </html>`);
+    });
+});
 
-app.post("/create-item", function (req, res) {
-    let safeText = sanitizeHTML(req.body.text, { allowedTags: [], allowedAttributes: {} })
-    db.collection("items").insertOne({ text: safeText }, function (err, info) {
-        res.json(info.ops[0])
-    })
-})
+app.post("/create-item", function(req, res) {
+  let safeText = sanitizeHTML(req.body.text, {
+    allowedTags: [],
+    allowedAttributes: {}
+  });
+  db.collection("items").insertOne({ text: safeText, checked: false }, function(
+    err,
+    info
+  ) {
+    res.json(info.ops[0]);
+  });
+});
 
-app.post("/update-item", function (req, res) {
-    let safeText = sanitizeHTML(req.body.text, { allowedTags: [], allowedAttributes: {} })
+app.post("/update-item", function(req, res) {
+  let safeText = sanitizeHTML(req.body.text, {
+    allowedTags: [],
+    allowedAttributes: {}
+  });
+  db.collection("items").findOneAndUpdate(
+    { _id: new mongodb.ObjectId(req.body.id) },
+    { $set: safeText },
+    function() {
+      res.send("Success");
+    }
+  );
+});
 
-    db.collection("items").findOneAndUpdate({ _id: new mongodb.ObjectId(req.body.id) }, { $set: safeText }, function () {
-        res.send("Success")
-    })
-})
+app.post("/delete-item", function(req, res) {
+  db.collection("items").deleteOne(
+    { _id: new mongodb.ObjectId(req.body.id) },
+    function() {
+      res.send("Success");
+    }
+  );
+});
 
-app.post("/delete-item", function (req, res) {
-    db.collection("items").deleteOne({ _id: new mongodb.ObjectId(req.body.id) }, function () {
-        res.send("Success")
-    })
-})
+app.post("/check-item", function(req, res) {
+    let checked=req.body.checked;
+    console.log(checked);
+  db.collection("items").findOneAndUpdate(
+    { _id: new mongodb.ObjectId(req.body.id) },
+    { $set: {checked:checked} },
+    function() {
+      res.send("Checked!");
+    }
+  );
+});
