@@ -1,4 +1,4 @@
-# Colloc COurses
+# Colloc Courses
 
 Simple groceries list
 
