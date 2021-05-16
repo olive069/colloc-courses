@@ -26,7 +26,7 @@ mongodb.connect(
 function passwordProtected(req, res, next) {
   res.set("WWW-Authenticate", 'Basic realm="Liste de Courses"');
   if (
-    req.headers.authorization == "Basic Y29sbG9jOmNvbGxvYw=="
+    req.headers.authorization == "Basic b2xpdmU6b2xpdmU="
   ) {
     next();
   } else {
